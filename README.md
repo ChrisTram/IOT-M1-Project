@@ -1,6 +1,6 @@
 # IOT-M1-Project
 
-#Groupe composé de Chris Tamier, Louiza Djaout, Reda Jalal, Ichrak Wahab, Derek Samson
+#Groupe composé de Chris Tramier, Louiza Djaout, Reda Jalal, Ichrak Wahab, Derek Samson
 
 Le projet “Bâtiment intelligent” a pour objectif de faire installer des **microcontrôleurs** dans les différentes salles afin de suivre régulièrement à l’aide de capteurs leurs températures et leurs luminosités, en temps réel et à distance.
 Nous obtiendrons ainsi un certains nombre de données à traiter afin de générer des statistiques sur l’état général du bâtiment que nous afficherons sur le **dashboard** WEB au cours du temps. Ces **données** et **statistiques** seront affichées sous forme de différents **graphiques**. 
