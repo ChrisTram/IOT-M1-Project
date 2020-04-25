@@ -1,1 +1,7 @@
 # IOT-M1-Project
+
+#Groupe composé de Chris Tamier, Louiza Djaout, Reda Jalal, Ichrak Wahab, Derek Samson
+
+Le projet “Bâtiment intelligent” a pour objectif de faire installer des **microcontrôleurs** dans les différentes salles afin de suivre régulièrement à l’aide de capteurs leurs températures et leurs luminosités, en temps réel et à distance.
+Nous obtiendrons ainsi un certains nombre de données à traiter afin de générer des statistiques sur l’état général du bâtiment que nous afficherons sur le **dashboard** WEB au cours du temps. Ces **données** et **statistiques** seront affichées sous forme de différents **graphiques**. 
+Des **LEDs** joueront le rôle d’un système d'alarme lorsque des seuils de **température** ou de **luminosité** seront atteints. Les microcontrôleurs se mettront en veille / s’allumeront de manière autonome, cela permettra de différencier le comportement de l’ESP selon l’ouverture / fermeture du bâtiment et donc sa fréquentation ainsi que de faire de l’**optimisation** de la **consommation d’énergie**. Les échanges de données se feront par **requêtes HTTPS** sécurisées, les ESP autonomes pourront également envoyer des alertes **SMS** en cas de situation exceptionnelle (ex: température excessive due à un incendie, lumière laissée allumée). L’interface du dashboard aura plusieurs fonctionnalités comme la possibilité de réveiller un microcontrôleur afin de faire une capture immédiate de l’état du système ou encore reprogrammer à distance un ESP afin de pouvoir faire évoluer le **code embarqué**.
