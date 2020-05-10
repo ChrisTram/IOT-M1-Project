@@ -29,6 +29,7 @@
     <title>IOT_PROJECT</title>
 </head>
 <body>
+    <div id="app">
     <nav class="navbar navbar-expand-sm bg-dark navbar-dark nav justify-content-center">
         <!-- Brand -->
         <a class="navbar-brand" href="#"> <i class="fas fa-home"></i> Accueil</a>
@@ -61,10 +62,16 @@
             <button class="btn btn-outline-success my-2 my-sm-0" type="submit"> <i class="fas fa-search"></i> Search</button>
           </form>
         
-        
+        <router-link class="navbar-brand" to="/register"><i class="fas fa-sign-in-alt"></i>  Inscription</router-link>
+              <ul class="navbar-nav">
 
+      <li class="nav-item">
+        <span class="nav-link"><i class="fas fa-hourglass-half"></i>  {{ new Date() | moment("dddd, MMMM Do YYYY, h:mm:ss a")  }}</span>
+      </li>  
+              </ul>
       </nav>
-      
+      <router-view></router-view>
+
       <br><br><br>
  <!-------------ICI les details pour chaque salle-->
  <Section id="sec1" data-text="Section">
@@ -214,19 +221,18 @@
       </div>
     </div>
   </Section>
-
+    </div>
 </body>
 </html>
 </template>
 
 <script>
-//import HelloWorld from './components/HelloWorld.vue'
-
+//import Register from "./components/Register.vue";
 
 export default {
   name: 'App',
   components: {
-    //HelloWorld
+    //Register
   }
 }
 </script>
