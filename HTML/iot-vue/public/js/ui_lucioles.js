@@ -169,7 +169,7 @@ window.onload = function init() {
 
     //=== Gestion de la flotte d'ESP =================================
 
-    var which_esps = ["Louiza","Ichrak","Reda","Derek"]
+    var which_esps = ["Louiza","Ichrak","Reda","Derek","Chris"]
     for (var i = 0; i < which_esps.length; i++) {
 	process_esp(which_esps, i)
     }

@@ -1,38 +1,14 @@
+<template>
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <!---------------------Pour les graphes ----------->
-
-    <script src="https://code.highcharts.com/highcharts.js"></script>
-    <script src="https://code.highcharts.com/modules/exporting.js"></script>
-    <script src="https://code.highcharts.com/modules/export-data.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> 
-
-    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-
-     <!---------------------Pour visualiser les icônes, s'iscrire d'abord sur le site font awsome ----------->
-     <script src="https://kit.fontawesome.com/f773ed4f42.js" crossorigin="anonymous"></script>
-    
-    <!-- ------------------------------------------------ -->
-    <link rel="stylesheet" 
+        <link rel="stylesheet" 
     href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" 
     integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
     crossorigin="anonymous">
-
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
-    integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" 
-    crossorigin="anonymous"></script>
-      
-    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" 
-    integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" 
-    crossorigin="anonymous"></script>
-
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" 
-    integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" 
-    crossorigin="anonymous"></script>
     <!-- ------------------------------------------------ -->
         <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" 
@@ -47,20 +23,8 @@
       href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css"
       integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" 
       crossorigin="anonymous">
+    <link rel="stylesheet" href="/HTML/style.css"/>
 
-      <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
-      integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" 
-      crossorigin="anonymous"></script>
-
-      <!-- Latest compiled and minified JavaScript -->
-      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
-      integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" 
-      crossorigin="anonymous"></script>
-
-        
-
-      <link rel="stylesheet" href="/HTML/style.css"/>
-      <script src="ui_lucioles.js"></script>
 
     <title>IOT_PROJECT</title>
 </head>
@@ -75,30 +39,21 @@
           <li class="nav-item">
             <a class="nav-link" href="#sec4"><i class="fas fa-exclamation-triangle"></i> Alerte</a>
           </li>
-          
+        </ul>
       
         <!-- Links -->
         <ul class="navbar-nav">
           <li class="nav-item">
             <a class="nav-link" href="#sec2"><i class="fas fa-chart-line"></i> Dashbord</a>
           </li>
-          
-      
-          <!-- Dropdown -->
-          <li class="nav-item dropdown ">
-            <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
-              <i class="fas fa-stream"></i> Liste des salles
-            </a>
-            <div class="dropdown-menu"> 
-              <a class="dropdown-item" href="#">C3</a>
-              <a class="dropdown-item" href="#">C4</a>
-              <a class="dropdown-item" href="#">C5</a>
-              
-              <a class="dropdown-item" href="#">TD12</a>
-              <a class="dropdown-item" href="#">TD13</a>
-              <a class="dropdown-item" href="#">TD14</a>
-            </div>
-          </li>
+              <b-dropdown id="dropdown-1" text="Liste des salles" class="m-md-2">
+                <b-dropdown-item><a href="#">C3</a></b-dropdown-item>
+                    <b-dropdown-item><a href="#">C4</a></b-dropdown-item>
+                    <b-dropdown-item><a href="#">C5</a></b-dropdown-item>
+                    <b-dropdown-item><a href="#">TD12</a></b-dropdown-item>
+                    <b-dropdown-item><a href="#">TD13</a></b-dropdown-item>
+                    <b-dropdown-item><a href="#">TD14</a></b-dropdown-item>
+                </b-dropdown>
         </ul>
         
           <form class="form-inline nav justify-content-right">
@@ -112,7 +67,7 @@
       
       <br><br><br>
  <!-------------ICI les details pour chaque salle-->
- <Section id="sec1", data-text="Section">
+ <Section id="sec1" data-text="Section">
   <div id="salle" class="container">
     <h1 style="text-align: center;">L'état actuel dans la salle : </h1>
     <br>
@@ -190,7 +145,7 @@
 
   
   <!-------------ICI le dashboard------------->
-  <Section id="sec2", data-text="Section">
+  <Section id="sec2" data-text="Section">
     <h1 style="max-width: 600px; margin: 0 auto;" align ="center">Dashbord of Lucioles</h1>
 
     <br>
@@ -200,9 +155,9 @@
         <div id="mydiv"></div>
     </div>
   </Section>
-  <br><br><br><br><br><br><br><br><br><br><br><br>
-      
-  <Section id="sec3", data-text="Section">
+        <br><br><br><br><br><br><br><br><br><br><br><br>
+
+  <Section id="sec3" data-text="Section">
     <h4 style="text-align: center; font-weight: bold;">les ampoules</h4>
     <table class="table table-bordered table-striped">
       <thead class="thead-dark">
@@ -249,7 +204,7 @@
     </table>
   </Section>
 
-  <Section id="sec4", data-text="Section">
+  <Section id="sec4" data-text="Section">
     <h4 style="text-align: center; font-weight: bold;"> Alerte</h4>
     <div class="card text-white bg-danger" style="max-width: 25rem;">
       <div class="card-header">Alerte</div>
@@ -262,3 +217,43 @@
 
 </body>
 </html>
+</template>
+
+<script>
+//import HelloWorld from './components/HelloWorld.vue'
+
+
+export default {
+  name: 'App',
+  components: {
+    //HelloWorld
+  }
+}
+</script>
+
+<style>
+body{
+    margin: 0;
+    padding: 0;
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
+section{
+    justify-content: center;
+    align-items: center;
+}
+
+
+#sec1{
+    height: 50vh;
+}
+#sec2{
+    height: 100vh;
+}
+#sec3{
+    height: 80vh;
+}
+#sec4{
+    height: 80vh;
+}
+</style>
