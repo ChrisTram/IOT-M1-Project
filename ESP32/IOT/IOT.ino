@@ -133,13 +133,13 @@ void setup(){
   delay(1000);
  
 
-  esp_err_t esp_sleep_enable_timer_wakeup(TIME_TO_SLEEP * US_TO_S_FACTOR);
+  esp_sleep_enable_timer_wakeup(TIME_TO_SLEEP * US_TO_S_FACTOR);
   Serial.println("Time to sleep : " + String(TIME_TO_SLEEP) + " seconds");
 
-  //esp_err_t esp_sleep_pd_config(ESP_PD_DOMAIN_RTC_PERIPH, ESP_SLEEP_WAKEUP_ULP);
+  //esp_sleep_pd_config(ESP_PD_DOMAIN_RTC_PERIPH, ESP_SLEEP_WAKEUP_ULP);
 
   Serial.println("Going to light sleep");
-  //esp_light_sleep_start();
+  esp_light_sleep_start();
   
 }
 
