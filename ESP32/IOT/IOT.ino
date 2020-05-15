@@ -118,7 +118,7 @@ void mqtt_pubcallback(char* topic, byte* message, unsigned int length) {
   Serial.print("arrived on topic : ");
   Serial.println(topic) ;
  
- /*==================== Light status ==================*/
+ /*//==================== Light status ==================*/
  
   if(String (topic) == TOPIC_LED) {
      // Par exemple : Changes the LED output state according to the message   
@@ -134,7 +134,7 @@ void mqtt_pubcallback(char* topic, byte* message, unsigned int length) {
   }
  
 
-  /*=================== Regime 1 =====================*/
+  /*//=================== Regime 1 =====================*/
 
   if(String (topic) == TOPIC_TEMP_TRESHOLD_1){
     Serial.print("Action : Changing temperature treshold for regime 1 to " + messageTemp + "°C");
@@ -146,7 +146,22 @@ void mqtt_pubcallback(char* topic, byte* message, unsigned int length) {
     light_treshold1 = messageTemp.toInt();  
   }
 
-  /*================== Regime 2 ======================*/
+    if(String (topic) == TOPIC_SLEEP_TIME_1){
+    Serial.print("Action : Changing sleeping time for regime 1 to " + messageTemp + " seconds");
+    time_to_sleep1 = messageTemp.toInt();
+  }
+
+  if(String (topic) == TOPIC_WORKING_HOURS_START_1){
+    Serial.print("Action : Changing working start time for regime 1 to " + messageTemp);
+    regime_start1 = messageTemp.toInt();
+  }
+  
+  if(String (topic) == TOPIC_WORKING_HOURS_END_1){
+    Serial.print("Action : Changing working end time for regime 1 to " + messageTemp);
+    regime_end1 = messageTemp.toInt();
+  }
+
+  /*//================== Regime 2 ======================*/
 
   if(String (topic) == TOPIC_TEMP_TRESHOLD_2){
     Serial.print("Action : Changing temperature treshold for regime 2 to " + messageTemp + "°C");
@@ -158,38 +173,22 @@ void mqtt_pubcallback(char* topic, byte* message, unsigned int length) {
     light_treshold2 = messageTemp.toInt();
   }
 
-   if(String (topic) == TOPIC_SLEEP_TIME_1){
-    Serial.print("Action : Changing sleeping time for regime 1 to " + messageTemp + " seconds");
-    time_to_sleep1 = messageTemp.toInt();
-  }
 
   if(String (topic) == TOPIC_SLEEP_TIME_2){
     Serial.print("Action : Changing sleeping time for regime 2 to " + messageTemp + " seconds");
     time_to_sleep2 = messageTemp.toInt();
   }
 
-  if(String (topic) == TOPIC_WORKING_HOURS_START_1){
-    Serial.print("Action : Changing working start time for regime 1 to " + messageTemp);
-    regime_start1 = messageTemp.toInt();
-  }
 
   if(String (topic) == TOPIC_WORKING_HOURS_START_2){
     Serial.print("Action : Changing working start time for regime 2 to " + messageTemp);
     regime_start2 = messageTemp.toInt();
   }
-
-  
-  if(String (topic) == TOPIC_WORKING_HOURS_END_1){
-    Serial.print("Action : Changing working end time for regime 1 to " + messageTemp);
-    regime_end1 = messageTemp.toInt();
-  }
-
     
   if(String (topic) == TOPIC_WORKING_HOURS_END_2){
     Serial.print("Action : Changing working end time for regime 2 to " + messageTemp);
     regime_end2 = messageTemp.toInt();
-  }
-  
+  } 
 }
 /*============= MQTT SUBSCRIBE =====================*/
 
@@ -239,7 +238,7 @@ String get_led_status(){
   return "on";
 }
 
-/*=============== ULP TSENS SETUP ===========*/
+/*=============== ULP ADC SETUP ===========*/
 
 
 void ulp_adc_wake_up(unsigned int low_adc_treshold, unsigned int high_adc_treshold){
@@ -318,11 +317,13 @@ void setup(){
 }
 
 void loop() {
+  
   timeClient.update();
   //set_local_time();
   //print_local_time();
   
   Serial.println(timeClient.getFormattedTime());
+  Serial.println(timeClient.getHours());
   
 
 /*========= Preparing payload =============*/
@@ -347,10 +348,6 @@ void loop() {
   Serial.println(data);
   client.publish(TOPIC_TEMP, data);  // publish it 
 
-  /* char tempString[8];
-     dtostrf(temperature, 1, 2, tempString);
-     client.publish(TOPIC_TEMP, tempString); */
-
   payload = "{\"who\": \"" + whoami + "\", \"value\": " + get_luminosity() + "}";
   payload.toCharArray(data, (payload.length() + 1));
   Serial.println(data);
@@ -364,5 +361,7 @@ void loop() {
   delay(period);
   
   client.loop(); // Process MQTT ... obligatoire une fois par loop()
+
+  //if(regime_start1 < timeClient.getHours()
 
 }
