@@ -1,10 +1,7 @@
 #include <NTPClient.h>
 #define MYTZ TZ_Europe_Paris
 
-#include "esp32/ulp.h"
-#include "soc/rtc_cntl_reg.h"
-#include "driver/rtc_io.h"
-#include "driver/adc.h"
+
 //#include <WiFi.h> // for WiFi shield
 //#include <WiFi101.h> // for WiFi 101 shield or MKR1000
 #include <WiFiUdp.h>
@@ -48,13 +45,13 @@ String whoami; // Identification de CET ESP au sein de la flotte
 
 RTC_DATA_ATTR int bootcount = 1 ;
 
-RTC_DATA_ATTR int time_to_sleep1 = 60;
+RTC_DATA_ATTR int time_to_sleep1 = 30;
 RTC_DATA_ATTR int temp_treshold1 = 70;
 RTC_DATA_ATTR int light_treshold1 = 1000;
 RTC_DATA_ATTR int regime_start1 = 7;
 RTC_DATA_ATTR int regime_end1 = 19;
 
-RTC_DATA_ATTR int time_to_sleep2 = 120;
+RTC_DATA_ATTR int time_to_sleep2 = 40;
 RTC_DATA_ATTR int temp_treshold2 = 70;
 RTC_DATA_ATTR int light_treshold2 = 1000;
 RTC_DATA_ATTR int regime_start2 = 19;
@@ -238,45 +235,6 @@ String get_led_status(){
   return "on";
 }
 
-/*=============== ULP ADC SETUP ===========*/
-
-
-void ulp_adc_wake_up(unsigned int low_adc_treshold, unsigned int high_adc_treshold){
-  
-   adc1_config_channel_atten(ADC1_CHANNEL_0, ADC_ATTEN_DB_11);
-   adc1_config_width(ADC_WIDTH_BIT_10);
-   adc1_ulp_enable();
-
-   rtc_gpio_init(GPIO_NUM_36);
-
-   const ulp_insn_t program[] = {
-      I_DELAY(32000),              // Wait until ESP32 goes to deep sleep
-      M_LABEL(1),                  // LABEL 1
-        I_MOVI(R0, 0),             // Set reg. R0 to initial 0
-        I_MOVI(R2, 0),             // Set reg. R2 to initial 0
-      M_LABEL(2),                  // LABEL 2
-        I_ADDI(R0, R0, 1),         // Increment cycle counter (reg. R0)
-        I_ADC(R1, 0, 0),           // Read ADC value to reg. R1
-        I_ADDR(R2, R2, R1),        // Add ADC value from reg R1 to reg. R2
-      M_BL(2, 4),                  // If cycle counter is less than 4, go to LABEL 2
-      I_RSHI(R0, R2, 2),           // Divide accumulated ADC value in reg. R2 by 4 and save it to reg. R0
-      M_BGE(3, high_adc_treshold), // If average ADC value from reg. R0 is higher or equal than high_adc_treshold, go to LABEL 3
-      M_BL(3, low_adc_treshold),   // If average ADC value from reg. R0 is lower than low_adc_treshold, go to LABEL 3
-      M_BX(1),                     // Go to LABEL 1
-      M_LABEL(3),                  // LABEL 3
-      I_WAKE(),                    // Wake up ESP32
-      I_END(),                     // Stop ULP program timer
-      I_HALT()                     // Halt the coprocessor
-   };
-
-   size_t size = sizeof(program)/sizeof(ulp_insn_t);
-   ulp_process_macros_and_load(0, program, &size);
-
-   ulp_run(0);
-   esp_sleep_enable_ulp_wakeup();
-   esp_deep_sleep_start();
-}
-
 /*=============== SETUP =====================*/
 
 void setup(){
@@ -299,32 +257,14 @@ void setup(){
   client.setServer(mqtt_server, 1883);
  
   client.setCallback(mqtt_pubcallback);
-
- 
- //disconnect_wifi();
- 
-  esp_sleep_enable_timer_wakeup(TIME_TO_SLEEP * US_TO_S_FACTOR);
-  Serial.println("Time to sleep : " + String(TIME_TO_SLEEP) + " seconds");
-
-  //ulp_adc_wake_up(10, 40);
-
-
-  //esp_sleep_pd_config(ESP_PD_DOMAIN_RTC_PERIPH, ESP_SLEEP_WAKEUP_ULP);
-
-  Serial.println("Going to light sleep");
-  esp_light_sleep_start();
   
 }
 
 void loop() {
-  
+
+  //Updating to the right time for good sync
   timeClient.update();
-  //set_local_time();
-  //print_local_time();
-  
-  Serial.println(timeClient.getFormattedTime());
-  Serial.println(timeClient.getHours());
-  
+
 
 /*========= Preparing payload =============*/
 
@@ -362,6 +302,47 @@ void loop() {
   
   client.loop(); // Process MQTT ... obligatoire une fois par loop()
 
-  //if(regime_start1 < timeClient.getHours()
+  int now_time = timeClient.getHours();
 
+  disconnect_wifi();
+
+  if (regime_start1 <= regime_end1){
+    // start and stop times are in the same day
+    if (now_time >= regime_start1 && now_time <= regime_end1){
+      Serial.println("In regime 1.");
+      esp_sleep_enable_timer_wakeup(time_to_sleep1 * US_TO_S_FACTOR);
+      Serial.println("Time to sleep : " + String(time_to_sleep1) + " seconds");
+      Serial.println("Going to light sleep");
+      esp_deep_sleep_start();
+    }
+  } else {
+    // start and stop times are in different days
+    if (now_time >= regime_start1 || now_time <= regime_end1){
+      Serial.println("In regime 1.");
+      esp_sleep_enable_timer_wakeup(time_to_sleep1 * US_TO_S_FACTOR);
+      Serial.println("Time to sleep : " + String(time_to_sleep1) + " seconds");
+      Serial.println("Going to deep sleep");
+      esp_deep_sleep_start();
+    }
+  }
+
+  if (regime_start2 <= regime_end2){
+    // start and stop times are in the same day
+    if (now_time >= regime_start2 && now_time <= regime_end2){
+      Serial.println("In regime 2.");
+      esp_sleep_enable_timer_wakeup(time_to_sleep2 * US_TO_S_FACTOR);
+      Serial.println("Time to sleep : " + String(time_to_sleep2) + " seconds");
+      Serial.println("Going to deep sleep");
+      esp_deep_sleep_start();
+    }
+  } else {
+    // start and stop times are in different days
+    if (now_time >= regime_start2 || now_time <= regime_end2){
+      Serial.println("In regime 2.");
+      esp_sleep_enable_timer_wakeup(time_to_sleep2 * US_TO_S_FACTOR);
+      Serial.println("Time to sleep : " + String(time_to_sleep2) + " seconds");
+      Serial.println("Going to deep sleep");
+      esp_deep_sleep_start();
+    }
+  }
 }
