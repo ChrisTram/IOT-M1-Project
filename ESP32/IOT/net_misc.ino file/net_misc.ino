@@ -16,6 +16,7 @@ void connect_wifi()
     // Access Point of the infrastructure
     const char *ssid = "HUAWEI-6EC2";
     const char *password = "FGY9MLBL";
+    const char *whoami = "Derek";
 
     Serial.println("\nConnecting Wifi to ");
     Serial.println(ssid);
@@ -28,4 +29,10 @@ void connect_wifi()
         Serial.print(".");
     }
     print_ip_status();
+}
+
+void disconnect_wifi()
+{
+    WiFi.disconnect(true);
+    WiFi.mode(WIFI_OFF);
 }
