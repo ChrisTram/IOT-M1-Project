@@ -9,6 +9,9 @@ const mqtt = require("mqtt");
 const TOPIC_LIGHT = "sensors/light";
 const TOPIC_TEMP = "sensors/temp";
 
+// Mailing
+process.env.NODE_TLS_REJECT_UNAUTHORIZED='0';
+    
 // express
 const express = require("express");
 const bodyParser = require("body-parser");
@@ -191,6 +194,53 @@ client.connect(function (err, mongodbClient) {
     wh = message.who;
     val = message.value;
 
+    
+    //Envoi du mail en fonction de l'alerte reçue
+    // VARIABLES Mailing
+    let transporter = nodemailer.createTransport({
+      host: 'smtp.gmail.com',
+      port: 587,
+      secure: false,
+      requireTLS: true,
+      auth: {
+          user: 'alert.lucioles@gmail.com',
+          pass: 'iotM1Miage'
+      }
+  });
+  
+  let mailAlerteLuminosité = {
+      from: 'alert.lucioles@gmail.com',
+      to: 'redadu06.rj@gmail.com',
+      subject: 'Test',
+      text: 'Bonjour, \n Ceci est une alerte de luminosté. La luminosité est de '+val+'\n Une ou plusieurs lampes de votre domicile sont allumées alors qu elles ne devraient pas l être'
+  };
+  
+  let mailAlerteTemperature = {
+    from: 'alert.lucioles@gmail.com',
+    to: 'redadu06.rj@gmail.com',
+    subject: 'Test',
+    text: 'Bonjour,  \n Ceci est une alerte de température. La température est de '+val+'°C. \n La température de votre domicile dépasse la normale, veuillez vérifier cette dernière'
+  };
+  
+    if(topic == TOPIC_ALERT_TEMP){
+      transporter.sendMail(mailAlerteLuminosité, (error, info) => {
+        if (error) {
+            return console.log(error.message);
+        }
+        console.log('Envoi mail alerte temperature');
+    });
+    }
+
+    if(topic == TOPIC_ALERT_LIGHT){
+      transporter.sendMail(mailAlerteTemperature, (error, info) => {
+        if (error) {
+            return console.log(error.message);
+        }
+        console.log('success');
+      });
+    }
+
+    
     // Debug : Gerer une liste de who pour savoir qui utilise le node server
     let wholist = [];
     var index = wholist.findIndex((x) => x.who == wh);
