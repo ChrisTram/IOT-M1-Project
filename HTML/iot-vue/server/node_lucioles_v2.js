@@ -86,6 +86,80 @@ client.connect(function (err, mongodbClient) {
         console.log("Node Server has subscribed to ", TOPIC_TEMP);
       }
     });
+    client_mqtt.subscribe(TOPIC_LED, function (err) {
+      if (!err) {
+        //client_mqtt.publish(TOPIC_LED, 'Hello mqtt')
+        console.log("Node Server has subscribed to ", TOPIC_LED);
+      }
+    });
+
+    client_mqtt.subscribe(TOPIC_TEMP_TRESHOLD_1, function (err) {
+      if (!err) {
+        //client_mqtt.publish(TOPIC_TEMP_TRESHOLD_1, 'Hello mqtt')
+        console.log("Node Server has subscribed to ", TOPIC_TEMP_TRESHOLD_1);
+      }
+    });
+
+    client_mqtt.subscribe(TOPIC_TEMP_TRESHOLD_2, function (err) {
+      if (!err) {
+        //client_mqtt.publish(TOPIC_TEMP_TRESHOLD_2, 'Hello mqtt')
+        console.log("Node Server has subscribed to ", TOPIC_TEMP_TRESHOLD_2);
+      }
+    });
+
+     client_mqtt.subscribe(TOPIC_LIGHT_TRESHOLD_1, function (err) {
+      if (!err) {
+        //client_mqtt.publish(TOPIC_LIGHT_TRESHOLD_1, 'Hello mqtt')
+        console.log("Node Server has subscribed to ", TOPIC_LIGHT_TRESHOLD_1);
+      }
+    });
+
+        client_mqtt.subscribe(TOPIC_LIGHT_TRESHOLD_2, function (err) {
+        if (!err) {
+          //client_mqtt.publish(TOPIC_LIGHT_TRESHOLD_2, 'Hello mqtt')
+          console.log("Node Server has subscribed to ", TOPIC_LIGHT_TRESHOLD_2);
+        }
+      });
+
+        client_mqtt.subscribe(TOPIC_SLEEP_TIME_1, function (err) {
+      if (!err) {
+        //client_mqtt.publish(TOPIC_SLEEP_TIME_1, 'Hello mqtt')
+        console.log("Node Server has subscribed to ", TOPIC_SLEEP_TIME_1);
+      }
+    });
+        client_mqtt.subscribe(TOPIC_SLEEP_TIME_2, function (err) {
+      if (!err) {
+        //client_mqtt.publish(TOPIC_SLEEP_TIME_2, 'Hello mqtt')
+        console.log("Node Server has subscribed to ", TOPIC_SLEEP_TIME_2);
+      }
+    });
+
+       client_mqtt.subscribe(TOPIC_WORKING_HOURS_START_1, function (err) {
+      if (!err) {
+        //client_mqtt.publish(TOPIC_WORKING_HOURS_START_1, 'Hello mqtt')
+        console.log("Node Server has subscribed to ", TOPIC_WORKING_HOURS_START_1);
+      }
+    }); 
+       client_mqtt.subscribe(TOPIC_WORKING_HOURS_END_1, function (err) {
+      if (!err) {
+        //client_mqtt.publish(TOPIC_WORKING_HOURS_END_1, 'Hello mqtt')
+        console.log("Node Server has subscribed to ", TOPIC_WORKING_HOURS_END_1);
+      }
+    }); 
+       client_mqtt.subscribe(TOPIC_WORKING_HOURS_START_2, function (err) {
+      if (!err) {
+        //client_mqtt.publish(TOPIC_WORKING_HOURS_START_2, 'Hello mqtt')
+        console.log("Node Server has subscribed to ", TOPIC_WORKING_HOURS_START_2);
+      }
+    }); 
+
+       client_mqtt.subscribe(TOPIC_WORKING_HOURS_END_2, function (err) {
+      if (!err) {
+        //client_mqtt.publish(TOPIC_WORKING_HOURS_END_2, 'Hello mqtt')
+        console.log("Node Server has subscribed to ", TOPIC_WORKING_HOURS_END_2);
+      }
+    }); 
+
   });
 
   //================================================================
