@@ -14,9 +14,9 @@ void print_ip_status()
 void connect_wifi()
 {
     // Access Point of the infrastructure
-    const char *ssid = "HUAWEI-6EC2";
-    const char *password = "FGY9MLBL";
-    const char *whoami = "Derek";
+    const char *ssid = "WIFI-JRKY";
+    const char *password = "kaoutyasreda06";
+    const char *whoami = "Reda";
 
     Serial.println("\nConnecting Wifi to ");
     Serial.println(ssid);
