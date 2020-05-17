@@ -33,7 +33,7 @@
           v-model="form.sleepTime"
           type="number"
           required
-          placeholder="Enter Sleep Time"
+          placeholder="Enter Starting time"
         ></b-form-input>
       </b-form-group>
 
@@ -43,7 +43,7 @@
           v-model="form.beginingRegime"
           type="time"
           required
-          placeholder="Enter Sleep Time"
+          placeholder="Enter End Time"
         ></b-form-input>
       </b-form-group>
 
