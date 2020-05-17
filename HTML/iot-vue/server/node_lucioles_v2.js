@@ -158,7 +158,22 @@ client.connect(function (err, mongodbClient) {
         //client_mqtt.publish(TOPIC_WORKING_HOURS_END_2, 'Hello mqtt')
         console.log("Node Server has subscribed to ", TOPIC_WORKING_HOURS_END_2);
       }
+    });
+
+    client_mqtt.subscribe(TOPIC_ALERT_TEMP, function (err) {
+      if (!err) {
+        //client_mqtt.publish(TOPIC_ALERT_TEMP, 'Hello mqtt')
+        console.log("Node Server has subscribed to ", TOPIC_ALERT_TEMP);
+      }
     }); 
+
+    client_mqtt.subscribe(TOPIC_ALERT_LIGHT, function (err) {
+      if (!err) {
+        //client_mqtt.publish(TOPIC_ALERT_LIGHT, 'Hello mqtt')
+        console.log("Node Server has subscribed to ", TOPIC_ALERT_LIGHT);
+      }
+    }); 
+ 
 
   });
 
