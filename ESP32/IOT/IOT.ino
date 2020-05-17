@@ -11,7 +11,10 @@
 #include "DallasTemperature.h"
 #include "net_misc.h"
 
-
+/* SI NOUS AVIONS EU A DISPOSITION LE KIT GSM
+#include "SIM900.h"
+#include <SoftwareSerial.h>
+*/
 
 WiFiUDP ntpUDP;
 
@@ -31,6 +34,12 @@ WiFiClient espClient; // Wifi
 PubSubClient client(espClient) ; // MQTT client
 
 String whoami; // Identification de CET ESP au sein de la flotte
+
+/* SI NOUS AVIONS EU A DISPOSITION LE KIT GSM 
+SoftwareSerial sim800l(7,8);
+boolean sms;
+*/
+
 
 //StaticJsonBuffer<200> jsonBuffer;
 
@@ -323,7 +332,62 @@ void setup() {
 
   client.setCallback(mqtt_pubcallback);
 
+   /* SI NOUS AVIONS EU A DISPOSITION LE KIT GSM 
+  sim800l.begin(9600);  // Démarrage du modem
+  Serial.begin(9600);   // Initialisation de la communication série
+  delay(500);           // Délai connexion
+  sms = true;
+  if(sim800l.available())
+    Serial.write(sim800l.read());
+  client.setCallback(mqtt_pubcallback);
+
+*/
+
 }
+
+ /* SI NOUS AVIONS EU A DISPOSITION LE KIT GSM 
+void sendsms(){
+  // SMS mode
+  Serial.println("SMS sender");
+  sim800l.print("AT+CMGF=1r");    // initialise le mode SMS
+  delay(100);
+  // numero telephone
+  Serial.println("0625855265"); 
+  char number[20] ;
+  readSerial(number);
+  sim800l.print("AT+CMGS=");
+  sim800l.print(number);
+  sim800l.print("r");
+  delay(100);
+  Serial.print("FAIRE ATTENTION A LA TEMPERATURE TROP HAUTE");
+  Serial.println(number);
+  char message[200];
+  readSerial(message);
+  sim800l.println(message);
+  sim800l.print(char(26));
+  delay(100);
+  sim800l.println();
+  Serial.print("Message : ");
+  Serial.println(message);
+  Serial.println("Text send");
+ }
+int readSerial(char result[]){
+  int i = 0;
+  while (1)
+  {
+  while (Serial.available() > 0){
+    char inChar = Serial.read();
+    if (inChar == 'n')
+    {
+  result[i] = '';
+  Serial.flush();
+  return 0;
+  }
+  if (inChar != 'r'){
+    result[i] = inChar;
+    i++;
+*/
+
 
 void loop() {
 
@@ -378,7 +442,12 @@ void loop() {
   client.loop(); // Process MQTT ... obligatoire une fois par loop()
 
   int now_time = timeClient.getHours();
-
+ /* SI NOUS AVIONS EU A DISPOSITION LE KIT GSM  
+    if(get_temperature()>40){   // on ne passe qu’une seule fois dans le loop()
+    sendsms();
+  sms = false;
+}  
+   */
   if (regime_start1 <= regime_end1) {
     // start and stop times are in the same day
     if (now_time >= regime_start1 && now_time <= regime_end1) {
