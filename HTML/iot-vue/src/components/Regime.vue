@@ -86,6 +86,17 @@ export default {
       onSubmit(evt) {
         evt.preventDefault()
         alert(JSON.stringify(this.form))
+        const formData = new FormData();
+        formData.append('data', JSON.stringify(this.form));
+        // Submit the form data 
+        this.$axios.post('http://localhost:3000/sendRegime', this.id, formData
+        ).then(response => {
+          console.log('Submit Success');
+          return response;
+        }).catch(e => {
+          console.log('Submit Fail')
+          return e;
+        });
       },
       onReset(evt) {
         evt.preventDefault()

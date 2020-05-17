@@ -1,7 +1,7 @@
 <template>
 <div>
-<Regime id="1"></Regime>
-<Regime id="2"></Regime>
+<Regime id=1></Regime>
+<Regime id=2></Regime>
 </div>
 </template>
 

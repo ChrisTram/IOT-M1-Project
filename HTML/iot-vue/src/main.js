@@ -3,6 +3,7 @@ import App from './App.vue'
 import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
 import LoadScript from 'vue-plugin-load-script';
 import VueRouter from "vue-router";
+import axios from 'axios'
 
 import Register from "./components/Register.vue";
 import Regimes from "./components/Regimes.vue";
@@ -28,14 +29,9 @@ Vue.loadScript("https://cdn.jsdelivr.net/npm/vue/dist/vue.js")
 Vue.loadScript("/js/ui_lucioles.js").then(() => {
   console.log("ui_lucioles.js Loaded")
 })
-
-
-Vue.loadScript("/js/node_lucioles_v2.js").then(() => {
-  console.log("node_lucioles_v2.js Loaded")
-})
-
 Vue.use(require('vue-moment'));
 Vue.use(VueRouter);
+Vue.prototype.$axios = axios
 
 const router = new VueRouter({
 routes: [

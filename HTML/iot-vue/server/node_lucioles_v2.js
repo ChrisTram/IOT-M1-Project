@@ -180,6 +180,20 @@ client.connect(function (err, mongodbClient) {
 
   });
 
+  
+  
+//VueJSApp links
+
+function connectToBroker(form,id) {
+  console.log("Received")
+  if(id == 1) {
+    //client_mqtt.publish()
+  } else if(id == 2) {
+    //client_mqtt.publish()
+  }
+}
+
+
   //================================================================
   // Callback de la reception des messages MQTT pour les topics sur
   // lesquels on s'est inscrit.
