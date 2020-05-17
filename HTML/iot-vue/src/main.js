@@ -29,6 +29,11 @@ Vue.loadScript("/js/ui_lucioles.js").then(() => {
   console.log("ui_lucioles.js Loaded")
 })
 
+
+Vue.loadScript("/js/node_lucioles_v2.js").then(() => {
+  console.log("node_lucioles_v2.js Loaded")
+})
+
 Vue.use(require('vue-moment'));
 Vue.use(VueRouter);
 
