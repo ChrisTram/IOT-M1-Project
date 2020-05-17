@@ -181,17 +181,19 @@ client.connect(function (err, mongodbClient) {
   });
 
   
-  
-//VueJSApp links
 
-function connectToBroker(form,id) {
-  console.log("Received")
-  if(id == 1) {
+app.post('/sendRegime', function(request, response) {
+  console.log('POST /')
+  console.dir(request.body)
+  if(request.id == 1) {
     //client_mqtt.publish()
-  } else if(id == 2) {
+  } else if(request.id == 2) {
     //client_mqtt.publish()
   }
-}
+  response.writeHead(200, {'Content-Type': 'text/html'})
+  response.end('thanks')
+})
+
 
 
   //================================================================
@@ -360,5 +362,12 @@ function connectToBroker(form,id) {
 
 // L'application est accessible sur le port 3000
 app.listen(3000, () => {
-  console.log("Server listening on port 3000");
+  console.log("Server listening on port 3000"); 
+});
+
+app.post('/s', (req,res)=>{
+  gm(img_path).implode(-1.2).write(op_path, function(err) {
+      if (err)
+          console.log(err);
+  })
 });
