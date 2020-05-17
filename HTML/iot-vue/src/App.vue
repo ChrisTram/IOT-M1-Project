@@ -63,6 +63,8 @@
           </form>
         
         <router-link class="navbar-brand" to="/register"><i class="fas fa-sign-in-alt"></i>  Inscription</router-link>
+        <router-link class="navbar-brand" to="/regimes"><i class="fas fa-sign-in-alt"></i> Régimes </router-link>
+
               <ul class="navbar-nav">
 
       <li class="nav-item">

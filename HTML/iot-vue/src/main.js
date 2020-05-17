@@ -5,6 +5,8 @@ import LoadScript from 'vue-plugin-load-script';
 import VueRouter from "vue-router";
 
 import Register from "./components/Register.vue";
+import Regimes from "./components/Regimes.vue";
+
 
 Vue.use(LoadScript);
 // Install BootstrapVue
@@ -36,7 +38,13 @@ routes: [
     path: "/register",
     name: "register",
     component: Register
+  },
+  {
+    path: "/regimes",
+    name: "regime",
+    component: Regimes
   }
+
 ],
 mode: "history"
 });
