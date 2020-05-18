@@ -6,8 +6,21 @@ var path = require("path");
 
 const mqtt = require("mqtt");
 // Topics MQTT
-const TOPIC_LIGHT = "sensors/light";
-const TOPIC_TEMP = "sensors/temp";
+const TOPIC_LED ="sensors/led"
+const TOPIC_LIGHT ="sensors/light";
+const TOPIC_TEMP_TRESHOLD_1 ="tresholds/temp1";
+const TOPIC_TEMP_TRESHOLD_2 ="tresholds/temp2";
+const TOPIC_LIGHT_TRESHOLD_1 ="tresholds/light1";
+const TOPIC_LIGHT_TRESHOLD_2 ="tresholds/light2";
+const TOPIC_SLEEP_TIME_1 ="sleep_times/regime1";
+const TOPIC_SLEEP_TIME_2 ="sleep_times/regime2";
+const TOPIC_WORKING_HOURS_START_1 ="working_hours/start1";
+const TOPIC_WORKING_HOURS_END_1 ="working_hours/end1";
+const TOPIC_WORKING_HOURS_START_2 ="working_hours/start2";
+const TOPIC_WORKING_HOURS_END_2 ="working_hours/end2";
+const TOPIC_ALERT_TEMP ="alerts/temp";
+const TOPIC_ALERT_LIGHT ="alerts/light";
+
 
 // Mailing
 process.env.NODE_TLS_REJECT_UNAUTHORIZED='0';
@@ -56,7 +69,7 @@ client.connect(function (err, mongodbClient) {
   //
   var dbo = client.db(mongoBaseName);
 
-  dbo.dropCollection("temp", function (err, delOK) {
+ /* dbo.dropCollection("temp", function (err, delOK) {
     if (err) throw err;
     if (delOK) console.log("Collection deleted");
   });
@@ -65,12 +78,12 @@ client.connect(function (err, mongodbClient) {
     if (err) throw err;
     if (delOK) console.log("Collection deleted");
   });
-
+*/
   //===============================================
   // Connection au broker MQTT distant
   //
   //const mqtt_url = 'http://192.168.1.100:1883' ///134.59.131.45:1883'
-  const mqtt_url = "http://broker.hivemq.com";
+  const mqtt_url = "http://broker.filipedoutelsilva.com";
   var client_mqtt = mqtt.connect(mqtt_url);
 
   //===============================================
@@ -83,12 +96,19 @@ client.connect(function (err, mongodbClient) {
         console.log("Node Server has subscribed to ", TOPIC_LIGHT);
       }
     });
-    client_mqtt.subscribe(TOPIC_TEMP, function (err) {
+    client_mqtt.subscribe(TOPIC_TEMP_TRESHOLD_1, function (err) {
       if (!err) {
         //client_mqtt.publish(TOPIC_TEMP, 'Hello mqtt')
-        console.log("Node Server has subscribed to ", TOPIC_TEMP);
+        console.log("Node Server has subscribed to ", TOPIC_TEMP_TRESHOLD_1);
       }
     });
+    client_mqtt.subscribe(TOPIC_TEMP_TRESHOLD_2, function (err) {
+      if (!err) {
+        //client_mqtt.publish(TOPIC_TEMP, 'Hello mqtt')
+        console.log("Node Server has subscribed to ", TOPIC_TEMP_TRESHOLD_2);
+      }
+    });
+
     client_mqtt.subscribe(TOPIC_LED, function (err) {
       if (!err) {
         //client_mqtt.publish(TOPIC_LED, 'Hello mqtt')
