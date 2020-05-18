@@ -345,7 +345,7 @@ client.connect(function(err, mongodbClient) {
   //app.use("/static", express.static(__dirname + "/public"));
   // Accés par le Node a la page HTML affichant les charts
   app.get("/", function(req, res) {
-    res.sendFile(path.join(__dirname + "/index.html"));
+    res.sendFile(path.join(__dirname + "/public/index.html"));
   });
 
   // Function for answering GET request on this node server ...
