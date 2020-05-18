@@ -89,7 +89,7 @@ export default {
         const formData = new FormData();
         formData.append('data', JSON.stringify(this.form));
         // Submit the form data 
-        this.$axios.post('http://localhost:3000/', this.id, formData
+        this.$axios.post('http://localhost:3000/sendRegime', this.id, formData
         ).then(response => {
           console.log('Submit Success');
           return response;
