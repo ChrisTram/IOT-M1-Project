@@ -1,31 +1,28 @@
 <template>
-<div>
-<Regime id=1></Regime>
-<Regime id=2></Regime>
-</div>
+  <div>
+    <Regime id="1"></Regime>
+    <Regime id="2"></Regime>
+  </div>
 </template>
 
 <script>
-
-import Regime from './Regime'
+import Regime from "./Regime";
 
 export default {
-  name: 'Regimes',
-    data: function() {
-      return {
-    errors: []
-      }
+  name: "Regimes",
+  data: function() {
+    return {
+      errors: []
+    };
   },
   components: {
-      Regime
+    Regime
   },
-  methods: {
-
-  },
+  methods: {},
   props: {
-    msg: String,
+    msg: String
   }
-}
+};
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
@@ -33,8 +30,8 @@ export default {
 h3 {
   margin: 40px 0 0;
 }
-.registerForm{
-    text-align:center;
+.registerForm {
+  text-align: center;
 }
 ul {
   list-style-type: none;
