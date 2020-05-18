@@ -336,7 +336,7 @@ app.post('/sendRegime', function(request, response) {
 
   // Accés par le Node a la page HTML affichant les charts
   app.get("/", function (req, res) {
-    res.sendFile(path.join(__dirname + "/ui_lucioles.html"));
+    res.sendFile(path.join(__dirname +"/public/index.html"));
   });
 
   // Function for answering GET request on this node server ...
