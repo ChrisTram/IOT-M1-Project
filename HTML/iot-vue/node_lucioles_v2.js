@@ -23,6 +23,7 @@ const TOPIC_ALERT_TEMP = "alerts/temp";
 const TOPIC_ALERT_LIGHT = "alerts/light";
 
 // Mailing
+const nodemailer = require("nodemailer");
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 
 // express
@@ -95,18 +96,7 @@ client.connect(function(err, mongodbClient) {
         console.log("Node Server has subscribed to ", TOPIC_LIGHT);
       }
     });
-    client_mqtt.subscribe(TOPIC_TEMP_TRESHOLD_1, function(err) {
-      if (!err) {
-        //client_mqtt.publish(TOPIC_TEMP, 'Hello mqtt')
-        console.log("Node Server has subscribed to ", TOPIC_TEMP_TRESHOLD_1);
-      }
-    });
-    client_mqtt.subscribe(TOPIC_TEMP_TRESHOLD_2, function(err) {
-      if (!err) {
-        //client_mqtt.publish(TOPIC_TEMP, 'Hello mqtt')
-        console.log("Node Server has subscribed to ", TOPIC_TEMP_TRESHOLD_2);
-      }
-    });
+    
 
     client_mqtt.subscribe(TOPIC_LED, function(err) {
       if (!err) {
@@ -245,6 +235,8 @@ client.connect(function(err, mongodbClient) {
     wh = message.who;
     val = message.value;
 
+    console.log(topic);
+
     //Envoi du mail en fonction de l'alerte reçue
     // VARIABLES Mailing
     let transporter = nodemailer.createTransport({
@@ -258,7 +250,7 @@ client.connect(function(err, mongodbClient) {
       },
     });
 
-    let mailAlerteLuminosité = {
+    let mailAlerteLuminosite = {
       from: "alert.lucioles@gmail.com",
       to: "redadu06.rj@gmail.com",
       subject: "Test",
@@ -278,21 +270,21 @@ client.connect(function(err, mongodbClient) {
         "°C. \n La température de votre domicile dépasse la normale, veuillez vérifier cette dernière",
     };
 
-    if (topic == TOPIC_ALERT_TEMP) {
-      transporter.sendMail(mailAlerteLuminosité, (error, info) => {
+    if (topic == "sensors/light") {
+      transporter.sendMail(mailAlerteTemperature, (error, info) => {
         if (error) {
           return console.log(error.message);
         }
         console.log("Envoi mail alerte temperature");
       });
-    }
+    } 
 
-    if (topic == TOPIC_ALERT_LIGHT) {
-      transporter.sendMail(mailAlerteTemperature, (error, info) => {
+    if (topic == "alerts/light") {
+      transporter.sendMail( mailAlerteLuminosite, (error, info) => {
         if (error) {
           return console.log(error.message);
         }
-        console.log("success");
+        console.log("Envoi mail alerte luminosite");
       });
     }
 

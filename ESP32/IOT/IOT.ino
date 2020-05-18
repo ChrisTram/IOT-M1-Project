@@ -30,7 +30,7 @@ DallasTemperature tempSensor(&oneWire);
 WiFiClient espClient; // Wifi
 PubSubClient client(espClient) ; // MQTT client
 
-String whoami = "Derek"; // Identification de CET ESP au sein de la flotte
+String whoami = "Reda"; // Identification de CET ESP au sein de la flotte
 
 //StaticJsonBuffer<200> jsonBuffer;
 
@@ -43,14 +43,14 @@ String whoami = "Derek"; // Identification de CET ESP au sein de la flotte
 RTC_DATA_ATTR int bootcount = 1 ;
 
 RTC_DATA_ATTR int time_to_sleep1 = 30;
-RTC_DATA_ATTR int temp_treshold1 = 20;
+RTC_DATA_ATTR int temp_treshold1 = 70;
 RTC_DATA_ATTR int light_treshold1 = 1000;
 RTC_DATA_ATTR int regime_start1 = 7;
 RTC_DATA_ATTR int regime_end1 = 19;
 
-RTC_DATA_ATTR int time_to_sleep2 = 40;
+RTC_DATA_ATTR int time_to_sleep2 = 5;
 RTC_DATA_ATTR int temp_treshold2 = 20;
-RTC_DATA_ATTR int light_treshold2 = 1000;
+RTC_DATA_ATTR int light_treshold2 = 2;
 RTC_DATA_ATTR int regime_start2 = 19;
 RTC_DATA_ATTR int regime_end2 = 7;
 
@@ -80,7 +80,8 @@ void print_wakeup_reason() {
 
 /*===== MQTT broker/server and TOPICS ========*/
 //const char* mqtt_server = "192.168.1.100";
-const char* mqtt_server = "broker.hivemq.com";
+const char* mqtt_server = "212.115.110.52";
+const int mqtt_port = 1818;
 #define TOPIC_TEMP "sensors/temp"
 #define TOPIC_LED "sensors/led"
 #define TOPIC_LIGHT "sensors/light"
@@ -119,11 +120,11 @@ void mqtt_pubcallback(char* topic, byte* message, unsigned int length) {
   if (String (topic) == TOPIC_LED) {
     // Par exemple : Changes the LED output state according to the message
     Serial.print("Action : Changing light to ");
-    if (messageTemp == "on") {
+    if (messageTemp == false) {
       Serial.println("on");
       set_pin(ledPin, HIGH);
 
-    } else if (messageTemp == "off") {
+    } else if (messageTemp == true) {
       Serial.println("off");
       set_pin(ledPin, LOW);
     }
@@ -293,11 +294,11 @@ int get_pin(int pin) {
   return digitalRead(pin);
 }
 
-String get_led_status() {
+boolean get_led_status() {
   if (get_pin(ledPin) == 0) {
-    return "off";
+    return false;
   }
-  return "on";
+  return true;
 }
 
 /*=============== SETUP =====================*/
@@ -319,7 +320,7 @@ void setup() {
 
   delay(1000);
 
-  client.setServer(mqtt_server, 1883);
+  client.setServer(mqtt_server, mqtt_port);
 
   client.setCallback(mqtt_pubcallback);
 

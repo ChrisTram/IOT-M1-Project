@@ -15,6 +15,7 @@
     "moment": "^2.25.3",
     "mongodb": "^3.5.7",
     "mqtt": "^4.0.1",
+    "nodemailer": "^6.4.6",
     "vue": "^2.6.11",
     "vue-moment": "^4.1.0",
     "vue-popperjs": "^2.3.0",
