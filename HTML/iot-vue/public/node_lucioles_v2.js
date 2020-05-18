@@ -342,7 +342,7 @@ client.connect(function(err, mongodbClient) {
   //================================================================
   //==== REQUETES HTTP reconnues par le Node =======================
   //================================================================
-  app.use("/static", express.static(__dirname + "/public"));
+  //app.use("/static", express.static(__dirname + "/public"));
   // Accés par le Node a la page HTML affichant les charts
   app.get("/", function(req, res) {
     res.sendFile(path.join(__dirname + "/index.html"));
