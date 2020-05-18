@@ -316,7 +316,7 @@ app.post('/sendRegime', function(request, response) {
 
   // Accés par le Node a la page HTML affichant les charts
   app.get("/", function (req, res) {
-    res.sendFile(path.join(__dirname + "/ui_lucioles.html"));
+    res.sendFile(path.join(__dirname + "/index.html"));
   });
 
   // Function for answering GET request on this node server ...
@@ -365,9 +365,3 @@ app.listen(3000, () => {
   console.log("Server listening on port 3000"); 
 });
 
-app.post('/s', (req,res)=>{
-  gm(img_path).implode(-1.2).write(op_path, function(err) {
-      if (err)
-          console.log(err);
-  })
-});
