@@ -8,6 +8,7 @@ const mqtt = require("mqtt");
 // Topics MQTT
 const TOPIC_LED = "sensors/led";
 const TOPIC_LIGHT = "sensors/light";
+const TOPIC_TEMP = "sensors/temp";
 const TOPIC_TEMP_TRESHOLD_1 = "tresholds/temp1";
 const TOPIC_TEMP_TRESHOLD_2 = "tresholds/temp2";
 const TOPIC_LIGHT_TRESHOLD_1 = "tresholds/light1";
@@ -76,13 +77,12 @@ client.connect(function(err, mongodbClient) {
   dbo.dropCollection("light", function (err, delOK) {
     if (err) throw err;
     if (delOK) console.log("Collection deleted");
-  });
-*/
+  }); */
   //===============================================
   // Connection au broker MQTT distant
   //
   //const mqtt_url = 'http://192.168.1.100:1883' ///134.59.131.45:1883'
-  const mqtt_url = "http://broker.filipedoutelsilva.com";
+  const mqtt_url = "http://212.115.110.52:1818";
   var client_mqtt = mqtt.connect(mqtt_url);
 
   //===============================================
@@ -212,10 +212,20 @@ client.connect(function(err, mongodbClient) {
   app.post("/sendRegime", function(request, response) {
     console.log("POST /");
     console.dir(request.body);
+  
     if (request.id == 1) {
-      //client_mqtt.publish()
+    
+      client_mqtt.publish(TOPIC_TEMP_TRESHOLD_1, request.body.seuilTemp);
+      client_mqtt.publish(TOPIC_LIGHT_TRESHOLD_1, request.body.seuilLumin);
+      client_mqtt.publish(TOPIC_SLEEP_TIME_1, request.body.sleepTime);
+      client_mqtt.publish(TOPIC_WORKING_HOURS_START_1, request.body.beginingRegime);
+      client_mqtt.publish(TOPIC_WORKING_HOURS_END_1, request.body.endRegime);
     } else if (request.id == 2) {
-      //client_mqtt.publish()
+      client_mqtt.publish(TOPIC_TEMP_TRESHOLD_2, request.body.seuilTemp);
+      client_mqtt.publish(TOPIC_LIGHT_TRESHOLD_2, request.body.seuilLumin);
+      client_mqtt.publish(TOPIC_SLEEP_TIME_2, request.body.sleepTime);
+      client_mqtt.publish(TOPIC_WORKING_HOURS_START_2, request.body.beginingRegime);
+      client_mqtt.publish(TOPIC_WORKING_HOURS_END_2, request.body.endRegime);
     }
     response.writeHead(200, { "Content-Type": "text/html" });
     response.end("thanks");
@@ -367,6 +377,7 @@ client.connect(function(err, mongodbClient) {
     console.log("sending URL ", req.originalUrl);
     console.log("wants to GET ", wa);
     console.log("values from object ", wh);
+
 
     const nb = 200; // Récupération des nb derniers samples
     // stockés dans la collection associée a ce
