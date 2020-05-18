@@ -8,7 +8,7 @@ const mqtt = require("mqtt");
 // Topics MQTT
 const TOPIC_LED = "sensors/led";
 const TOPIC_LIGHT = "sensors/light";
-const TOPIC_TEMP = "sensors/temp";
+const TOPIC_TEMPERATURE = "sensors/temp";
 const TOPIC_TEMP_TRESHOLD_1 = "tresholds/temp1";
 const TOPIC_TEMP_TRESHOLD_2 = "tresholds/temp2";
 const TOPIC_LIGHT_TRESHOLD_1 = "tresholds/light1";
@@ -94,6 +94,13 @@ client.connect(function(err, mongodbClient) {
       if (!err) {
         //client_mqtt.publish(TOPIC_LIGHT, 'Hello mqtt')
         console.log("Node Server has subscribed to ", TOPIC_LIGHT);
+      }
+    });
+
+    client_mqtt.subscribe(TOPIC_TEMPERATURE, function(err) {
+      if (!err) {
+        //client_mqtt.publish(TOPIC_TEMPERATURE, 'Hello mqtt')
+        console.log("Node Server has subscribed to ", TOPIC_TEMPERATURE);
       }
     });
     
@@ -270,7 +277,7 @@ client.connect(function(err, mongodbClient) {
         "°C. \n La température de votre domicile dépasse la normale, veuillez vérifier cette dernière",
     };
 
-    if (topic == "sensors/light") {
+    if (topic == "alerts/temp") {
       transporter.sendMail(mailAlerteTemperature, (error, info) => {
         if (error) {
           return console.log(error.message);

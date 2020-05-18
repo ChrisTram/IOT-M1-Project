@@ -43,8 +43,8 @@ String whoami = "Reda"; // Identification de CET ESP au sein de la flotte
 RTC_DATA_ATTR int bootcount = 1 ;
 
 RTC_DATA_ATTR int time_to_sleep1 = 30;
-RTC_DATA_ATTR int temp_treshold1 = 70;
-RTC_DATA_ATTR int light_treshold1 = 1000;
+RTC_DATA_ATTR int temp_treshold1 = 15;
+RTC_DATA_ATTR int light_treshold1 = 299;
 RTC_DATA_ATTR int regime_start1 = 7;
 RTC_DATA_ATTR int regime_end1 = 19;
 
@@ -82,7 +82,7 @@ void print_wakeup_reason() {
 //const char* mqtt_server = "192.168.1.100";
 const char* mqtt_server = "212.115.110.52";
 const int mqtt_port = 1818;
-#define TOPIC_TEMP "sensors/temp"
+#define TOPIC_TEMPERATURE "sensors/temp"
 #define TOPIC_LED "sensors/led"
 #define TOPIC_LIGHT "sensors/light"
 #define TOPIC_TEMP_TRESHOLD_1 "tresholds/temp1"
@@ -120,11 +120,11 @@ void mqtt_pubcallback(char* topic, byte* message, unsigned int length) {
   if (String (topic) == TOPIC_LED) {
     // Par exemple : Changes the LED output state according to the message
     Serial.print("Action : Changing light to ");
-    if (messageTemp == false) {
+    if (messageTemp == "false") {
       Serial.println("on");
       set_pin(ledPin, HIGH);
 
-    } else if (messageTemp == true) {
+    } else if (messageTemp == "true") {
       Serial.println("off");
       set_pin(ledPin, LOW);
     }
@@ -194,40 +194,53 @@ void mqtt_pubcallback(char* topic, byte* message, unsigned int length) {
 void testAlertTemp1(int temp) {
   if (temp >= temp_treshold1) {
     char data[80];
-    String payload2 = "{\"who\": \"" + whoami + "\", \"value\": " + temp + "}";
+    int32_t period = 60 * 1000l;
+    String payload2 = "{\"who\": \"" + whoami + "\", \"value\": " + String(temp) + "}";
     payload2.toCharArray(data, (payload2.length() + 1));
     Serial.println(data);
     client.publish(TOPIC_ALERT_TEMP, data);
+    delay(period);
+    client.loop();
+    
   }
 }
 
 void testAlertTemp2(int temp) {
   if (temp >= temp_treshold2) {
     char data[80];
-    String payload2 = "{\"who\": \"" + whoami + "\", \"value\": " + temp + "}";
+    int32_t period = 60 * 1000l;
+    String payload2 = "{\"who\": \"" + whoami + "\", \"value\": " + String(temp) + "}";
     payload2.toCharArray(data, (payload2.length() + 1));
     Serial.println(data);
     client.publish(TOPIC_ALERT_TEMP, data);
+    delay(period);
+    client.loop();
   }
 }
 
 void testAlertLight1(int lum) {
   if (lum >= light_treshold1) {
     char data[80];
-    String payload2 = "{\"who\": \"" + whoami + "\", \"value\": " + lum + "}";
+    int32_t period = 60 * 1000l;
+    String payload2 = "{\"who\": \"" + whoami + "\", \"value\": " + String(lum) + "}";
     payload2.toCharArray(data, (payload2.length() + 1));
     Serial.println(data);
     client.publish(TOPIC_ALERT_LIGHT, data);
+    delay(period);
+    client.loop();
   }
 }
 
 void testAlertLight2(int lum) {
   if (lum >= light_treshold2) {
     char data[80];
-    String payload2 = "{\"who\": \"" + whoami + "\", \"value\": " + lum + "}";
+    int32_t period = 60 * 1000l;
+    String payload2 = "{\"who\": \"" + whoami + "\", \"value\": " + String(lum) + "}";
     payload2.toCharArray(data, (payload2.length() + 1));
     Serial.println(data);
     client.publish(TOPIC_ALERT_LIGHT, data);
+    delay(period);
+    client.loop();
   }
 }
 
@@ -362,7 +375,7 @@ void loop() {
 
   payload.toCharArray(data, (payload.length() + 1)); // Convert String payload to a char array
   Serial.println(data);
-  client.publish(TOPIC_TEMP, data);  // publish it
+  client.publish(TOPIC_TEMPERATURE, data);  // publish it
 
   payload = "{\"who\": \"" + whoami + "\", \"value\": " + get_luminosity() + "}";
   payload.toCharArray(data, (payload.length() + 1));
@@ -376,7 +389,7 @@ void loop() {
 
   delay(period);
 
-  client.loop(); // Process MQTT ... obligatoire une fois par loop()
+  //client.loop(); // Process MQTT ... obligatoire une fois par loop()
 
   int now_time = timeClient.getHours();
 
