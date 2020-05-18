@@ -109,7 +109,7 @@ export default {
       }
     },
     props: {
-      id: Number,
+      id: String,
   }
 }
 </script>
