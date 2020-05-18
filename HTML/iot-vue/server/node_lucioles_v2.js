@@ -83,7 +83,7 @@ client.connect(function (err, mongodbClient) {
   // Connection au broker MQTT distant
   //
   //const mqtt_url = 'http://192.168.1.100:1883' ///134.59.131.45:1883'
-  const mqtt_url = "http://broker.hivemq.com";
+  const mqtt_url = "http://broker.filipedoutelsilva.com";
   var client_mqtt = mqtt.connect(mqtt_url);
 
   //===============================================
