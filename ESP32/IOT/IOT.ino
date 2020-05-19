@@ -30,7 +30,7 @@ DallasTemperature tempSensor(&oneWire);
 WiFiClient espClient; // Wifi
 PubSubClient client(espClient) ; // MQTT client
 
-String whoami = "Reda"; // Identification de CET ESP au sein de la flotte
+String whoami = "Derek"; // Identification de CET ESP au sein de la flotte
 
 //StaticJsonBuffer<200> jsonBuffer;
 
@@ -45,14 +45,14 @@ RTC_DATA_ATTR int bootcount = 1 ;
 RTC_DATA_ATTR int time_to_sleep1 = 30;
 RTC_DATA_ATTR int temp_treshold1 = 15;
 RTC_DATA_ATTR int light_treshold1 = 299;
-RTC_DATA_ATTR int regime_start1 = 7;
-RTC_DATA_ATTR int regime_end1 = 19;
+RTC_DATA_ATTR String regime_start1 = "07:00";
+RTC_DATA_ATTR String regime_end1 = "19:00";
 
 RTC_DATA_ATTR int time_to_sleep2 = 5;
 RTC_DATA_ATTR int temp_treshold2 = 20;
 RTC_DATA_ATTR int light_treshold2 = 2;
-RTC_DATA_ATTR int regime_start2 = 19;
-RTC_DATA_ATTR int regime_end2 = 7;
+RTC_DATA_ATTR String regime_start2 = "19:00";
+RTC_DATA_ATTR String regime_end2 = "07:00";
 
 
 //esp_err_t esp_sleep_enable_ulp_wakeup()
@@ -76,6 +76,12 @@ void print_wakeup_reason() {
     default:
       Serial.printf("Wakeup was not caused by sleep : %d\n", wakeup_reason);
   }
+}
+
+int timeToInt(String t){
+  int hours = t.substring(0,2).toInt();
+  int minutes = t.substring(3).toInt();
+  return hours * 3600 + minutes * 60;
 }
 
 /*===== MQTT broker/server and TOPICS ========*/
@@ -150,12 +156,12 @@ void mqtt_pubcallback(char* topic, byte* message, unsigned int length) {
 
   if (String (topic) == TOPIC_WORKING_HOURS_START_1) {
     Serial.print("Action : Changing working start time for regime 1 to " + messageTemp);
-    regime_start1 = messageTemp.toInt();
+    regime_start1 = messageTemp;
   }
 
   if (String (topic) == TOPIC_WORKING_HOURS_END_1) {
     Serial.print("Action : Changing working end time for regime 1 to " + messageTemp);
-    regime_end1 = messageTemp.toInt();
+    regime_end1 = messageTemp;
   }
 
 
@@ -180,12 +186,12 @@ void mqtt_pubcallback(char* topic, byte* message, unsigned int length) {
 
   if (String (topic) == TOPIC_WORKING_HOURS_START_2) {
     Serial.print("Action : Changing working start time for regime 2 to " + messageTemp);
-    regime_start2 = messageTemp.toInt();
+    regime_start2 = messageTemp;
   }
 
   if (String (topic) == TOPIC_WORKING_HOURS_END_2) {
     Serial.print("Action : Changing working end time for regime 2 to " + messageTemp);
-    regime_end2 = messageTemp.toInt();
+    regime_end2 = messageTemp;
   }
 }
 
@@ -269,20 +275,8 @@ void start_regime2() {
 /*============= MQTT SUBSCRIBE =====================*/
 
 void mqtt_mysubscribe(char* topic) {
-
-  while (!client.connected()) { // Loop until we are reconnected
-    Serial.print("Attempting MQTT connection...");
-    if (client.connect("esp32", "try", "try")) { // Attempt to connect
-      Serial.println("connected");
-      client.subscribe(topic); // and then Subscribe
-    } else { // Connection failed
-      Serial.print("failed, rc=");
-      Serial.print(client.state());
-      Serial.println("try again in 5 seconds");
-      // Wait 5 seconds before retrying
-      delay(5 * 1000);
-    }
-  }
+      Serial.println("Subscribing to topic : " + String(topic));
+      client.subscribe(topic); // and then Subscribe   
 }
 
 /*============= ACCESSEURS ====================*/
@@ -314,6 +308,35 @@ boolean get_led_status() {
   return true;
 }
 
+
+void reconnect() {
+  // Loop until we're reconnected
+  while (!client.connected()) {
+    Serial.print("Attempting MQTT reconnection...");
+    // Attempt to connect
+    if (client.connect("ESP32Client")) {
+      Serial.println("connected");
+      // Subscribe
+        mqtt_mysubscribe((char*) (TOPIC_LED));
+        mqtt_mysubscribe((char*) (TOPIC_TEMP_TRESHOLD_1));
+        mqtt_mysubscribe((char*) (TOPIC_TEMP_TRESHOLD_2));
+        mqtt_mysubscribe((char*) (TOPIC_LIGHT_TRESHOLD_1));
+        mqtt_mysubscribe((char*) (TOPIC_LIGHT_TRESHOLD_2));
+        mqtt_mysubscribe((char*) (TOPIC_SLEEP_TIME_1));
+        mqtt_mysubscribe((char*) (TOPIC_SLEEP_TIME_2));
+        mqtt_mysubscribe((char*) (TOPIC_WORKING_HOURS_START_1));
+        mqtt_mysubscribe((char*) (TOPIC_WORKING_HOURS_START_2));
+        mqtt_mysubscribe((char*) (TOPIC_WORKING_HOURS_END_1));
+        mqtt_mysubscribe((char*) (TOPIC_WORKING_HOURS_END_2));
+    } else {
+      Serial.print("failed, rc=");
+      Serial.print(client.state());
+      Serial.println(" try again in 5 seconds");
+      // Wait 5 seconds before retrying
+      delay(5000);
+    }
+  }
+}
 /*=============== SETUP =====================*/
 
 void setup() {
@@ -353,17 +376,7 @@ void loop() {
 
   /* Subscribe to TOPIC_LED if not yet ! */
   if (!client.connected()) {
-    mqtt_mysubscribe((char*) (TOPIC_LED));
-    mqtt_mysubscribe((char*) (TOPIC_TEMP_TRESHOLD_1));
-    mqtt_mysubscribe((char*) (TOPIC_TEMP_TRESHOLD_2));
-    mqtt_mysubscribe((char*) (TOPIC_LIGHT_TRESHOLD_1));
-    mqtt_mysubscribe((char*) (TOPIC_LIGHT_TRESHOLD_2));
-    mqtt_mysubscribe((char*) (TOPIC_SLEEP_TIME_1));
-    mqtt_mysubscribe((char*) (TOPIC_SLEEP_TIME_2));
-    mqtt_mysubscribe((char*) (TOPIC_WORKING_HOURS_START_1));
-    mqtt_mysubscribe((char*) (TOPIC_WORKING_HOURS_START_2));
-    mqtt_mysubscribe((char*) (TOPIC_WORKING_HOURS_END_1));
-    mqtt_mysubscribe((char*) (TOPIC_WORKING_HOURS_END_2));
+    reconnect();
   }
 
   /* Publish Temperature & Light periodically */
@@ -373,15 +386,18 @@ void loop() {
   payload += get_temperature();
   payload += "}";
 
+  Serial.println("Publishing temperature mesurement.");
   payload.toCharArray(data, (payload.length() + 1)); // Convert String payload to a char array
   Serial.println(data);
   client.publish(TOPIC_TEMPERATURE, data);  // publish it
 
+  Serial.println("Publishing light mesurement.");
   payload = "{\"who\": \"" + whoami + "\", \"value\": " + get_luminosity() + "}";
   payload.toCharArray(data, (payload.length() + 1));
   Serial.println(data);
   client.publish(TOPIC_LIGHT, data);
 
+  Serial.println("Publishing led status.");
   payload = "{\"who\": \"" + whoami + "\", \"value\": " + get_led_status() + "}";
   payload.toCharArray(data, (payload.length() + 1));
   Serial.println(data);
@@ -391,28 +407,36 @@ void loop() {
 
   //client.loop(); // Process MQTT ... obligatoire une fois par loop()
 
-  int now_time = timeClient.getHours();
+  int now_time = timeClient.getHours()*3600 + timeClient.getMinutes()*60;
+  int start1 = timeToInt(regime_start1);
+  int end1 = timeToInt(regime_end1);
+  int start2 = timeToInt(regime_start2);
+  int end2 = timeToInt(regime_end2);
 
-  if (regime_start1 <= regime_end1) {
+  Serial.println("now time : " + String(now_time));
+  Serial.println("start time : " + String(start2));
+  Serial.println("end time : " + String(end2));
+
+  if (start1 <= end1) {
     // start and stop times are in the same day
-    if (now_time >= regime_start1 && now_time <= regime_end1) {
+    if (now_time >= start1 && now_time <= end1) {
       start_regime1();
     }
   } else {
     // start and stop times are in different days
-    if (now_time >= regime_start1 || now_time <= regime_end1) {
+    if (now_time >= start1 || now_time <= end1) {
       start_regime1();
     }
   }
 
-  if (regime_start2 <= regime_end2) {
+  if (start2 <= end2) {
     // start and stop times are in the same day
-    if (now_time >= regime_start2 && now_time <= regime_end2) {
+    if (now_time >= start2 && now_time <= end2) {
       start_regime2();
     }
   } else {
     // start and stop times are in different days
-    if (now_time >= regime_start2 || now_time <= regime_end2) {
+    if (now_time >= start2 || now_time <= end2) {
       start_regime2();
     }
   }

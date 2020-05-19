@@ -35,7 +35,7 @@ const app = express();
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, "/")));
-app.use(function(request, response, next) {
+app.use(function (request, response, next) {
   //Pour eviter les problemes de CORS/REST
   response.header("Access-Control-Allow-Origin", "*");
   response.header("Access-Control-Allow-Headers", "*");
@@ -61,7 +61,7 @@ const client = new MongoClient(uri, {
 });
 
 // Connection a la DB MongoDB
-client.connect(function(err, mongodbClient) {
+client.connect(function (err, mongodbClient) {
   if (err) throw err; // If connection to DB failed ...
   // else we get a "db" engine reference
 
@@ -89,71 +89,70 @@ client.connect(function(err, mongodbClient) {
   //===============================================
   // Des la connection, le serveur NodeJS s'abonne aux topics MQTT
   //
-  client_mqtt.on("connect", function() {
-    client_mqtt.subscribe(TOPIC_LIGHT, function(err) {
+  client_mqtt.on("connect", function () {
+    client_mqtt.subscribe(TOPIC_LIGHT, function (err) {
       if (!err) {
         //client_mqtt.publish(TOPIC_LIGHT, 'Hello mqtt')
         console.log("Node Server has subscribed to ", TOPIC_LIGHT);
       }
     });
 
-    client_mqtt.subscribe(TOPIC_TEMPERATURE, function(err) {
+    client_mqtt.subscribe(TOPIC_TEMPERATURE, function (err) {
       if (!err) {
         //client_mqtt.publish(TOPIC_TEMPERATURE, 'Hello mqtt')
         console.log("Node Server has subscribed to ", TOPIC_TEMPERATURE);
       }
     });
-    
 
-    client_mqtt.subscribe(TOPIC_LED, function(err) {
+    client_mqtt.subscribe(TOPIC_LED, function (err) {
       if (!err) {
         //client_mqtt.publish(TOPIC_LED, 'Hello mqtt')
         console.log("Node Server has subscribed to ", TOPIC_LED);
       }
     });
 
-    client_mqtt.subscribe(TOPIC_TEMP_TRESHOLD_1, function(err) {
+    client_mqtt.subscribe(TOPIC_TEMP_TRESHOLD_1, function (err) {
       if (!err) {
         //client_mqtt.publish(TOPIC_TEMP_TRESHOLD_1, 'Hello mqtt')
         console.log("Node Server has subscribed to ", TOPIC_TEMP_TRESHOLD_1);
       }
     });
 
-    client_mqtt.subscribe(TOPIC_TEMP_TRESHOLD_2, function(err) {
+    client_mqtt.subscribe(TOPIC_TEMP_TRESHOLD_2, function (err) {
       if (!err) {
         //client_mqtt.publish(TOPIC_TEMP_TRESHOLD_2, 'Hello mqtt')
         console.log("Node Server has subscribed to ", TOPIC_TEMP_TRESHOLD_2);
       }
     });
 
-    client_mqtt.subscribe(TOPIC_LIGHT_TRESHOLD_1, function(err) {
+    client_mqtt.subscribe(TOPIC_LIGHT_TRESHOLD_1, function (err) {
       if (!err) {
         //client_mqtt.publish(TOPIC_LIGHT_TRESHOLD_1, 'Hello mqtt')
         console.log("Node Server has subscribed to ", TOPIC_LIGHT_TRESHOLD_1);
       }
     });
 
-    client_mqtt.subscribe(TOPIC_LIGHT_TRESHOLD_2, function(err) {
+    client_mqtt.subscribe(TOPIC_LIGHT_TRESHOLD_2, function (err) {
       if (!err) {
         //client_mqtt.publish(TOPIC_LIGHT_TRESHOLD_2, 'Hello mqtt')
         console.log("Node Server has subscribed to ", TOPIC_LIGHT_TRESHOLD_2);
       }
     });
 
-    client_mqtt.subscribe(TOPIC_SLEEP_TIME_1, function(err) {
+    client_mqtt.subscribe(TOPIC_SLEEP_TIME_1, function (err) {
       if (!err) {
         //client_mqtt.publish(TOPIC_SLEEP_TIME_1, 'Hello mqtt')
         console.log("Node Server has subscribed to ", TOPIC_SLEEP_TIME_1);
       }
     });
-    client_mqtt.subscribe(TOPIC_SLEEP_TIME_2, function(err) {
+    client_mqtt.subscribe(TOPIC_SLEEP_TIME_2, function (err) {
       if (!err) {
         //client_mqtt.publish(TOPIC_SLEEP_TIME_2, 'Hello mqtt')
         console.log("Node Server has subscribed to ", TOPIC_SLEEP_TIME_2);
       }
     });
 
-    client_mqtt.subscribe(TOPIC_WORKING_HOURS_START_1, function(err) {
+    client_mqtt.subscribe(TOPIC_WORKING_HOURS_START_1, function (err) {
       if (!err) {
         //client_mqtt.publish(TOPIC_WORKING_HOURS_START_1, 'Hello mqtt')
         console.log(
@@ -162,7 +161,7 @@ client.connect(function(err, mongodbClient) {
         );
       }
     });
-    client_mqtt.subscribe(TOPIC_WORKING_HOURS_END_1, function(err) {
+    client_mqtt.subscribe(TOPIC_WORKING_HOURS_END_1, function (err) {
       if (!err) {
         //client_mqtt.publish(TOPIC_WORKING_HOURS_END_1, 'Hello mqtt')
         console.log(
@@ -171,7 +170,7 @@ client.connect(function(err, mongodbClient) {
         );
       }
     });
-    client_mqtt.subscribe(TOPIC_WORKING_HOURS_START_2, function(err) {
+    client_mqtt.subscribe(TOPIC_WORKING_HOURS_START_2, function (err) {
       if (!err) {
         //client_mqtt.publish(TOPIC_WORKING_HOURS_START_2, 'Hello mqtt')
         console.log(
@@ -181,7 +180,7 @@ client.connect(function(err, mongodbClient) {
       }
     });
 
-    client_mqtt.subscribe(TOPIC_WORKING_HOURS_END_2, function(err) {
+    client_mqtt.subscribe(TOPIC_WORKING_HOURS_END_2, function (err) {
       if (!err) {
         //client_mqtt.publish(TOPIC_WORKING_HOURS_END_2, 'Hello mqtt')
         console.log(
@@ -191,14 +190,14 @@ client.connect(function(err, mongodbClient) {
       }
     });
 
-    client_mqtt.subscribe(TOPIC_ALERT_TEMP, function(err) {
+    client_mqtt.subscribe(TOPIC_ALERT_TEMP, function (err) {
       if (!err) {
         //client_mqtt.publish(TOPIC_ALERT_TEMP, 'Hello mqtt')
         console.log("Node Server has subscribed to ", TOPIC_ALERT_TEMP);
       }
     });
 
-    client_mqtt.subscribe(TOPIC_ALERT_LIGHT, function(err) {
+    client_mqtt.subscribe(TOPIC_ALERT_LIGHT, function (err) {
       if (!err) {
         //client_mqtt.publish(TOPIC_ALERT_LIGHT, 'Hello mqtt')
         console.log("Node Server has subscribed to ", TOPIC_ALERT_LIGHT);
@@ -206,23 +205,31 @@ client.connect(function(err, mongodbClient) {
     });
   });
 
-  app.post("/sendRegime", function(request, response) {
+  app.post("/sendRegime", function (request, response) {
     console.log("POST /");
     console.dir(request.body);
-  
-    if (request.id == 1) {
-    
+
+    if (request.body.id == 1) {
       client_mqtt.publish(TOPIC_TEMP_TRESHOLD_1, request.body.seuilTemp);
       client_mqtt.publish(TOPIC_LIGHT_TRESHOLD_1, request.body.seuilLumin);
       client_mqtt.publish(TOPIC_SLEEP_TIME_1, request.body.sleepTime);
-      client_mqtt.publish(TOPIC_WORKING_HOURS_START_1, request.body.beginingRegime);
+      client_mqtt.publish(
+        TOPIC_WORKING_HOURS_START_1,
+        request.body.beginingRegime
+      );
       client_mqtt.publish(TOPIC_WORKING_HOURS_END_1, request.body.endRegime);
     } else if (request.id == 2) {
       client_mqtt.publish(TOPIC_TEMP_TRESHOLD_2, request.body.seuilTemp);
       client_mqtt.publish(TOPIC_LIGHT_TRESHOLD_2, request.body.seuilLumin);
       client_mqtt.publish(TOPIC_SLEEP_TIME_2, request.body.sleepTime);
-      client_mqtt.publish(TOPIC_WORKING_HOURS_START_2, request.body.beginingRegime);
-      client_mqtt.publish(TOPIC_WORKING_HOURS_END_2, request.body.endRegime);
+      client_mqtt.publish(
+        TOPIC_WORKING_HOURS_START_2,
+        request.body.beginingRegime.toString()
+      );
+      client_mqtt.publish(
+        TOPIC_WORKING_HOURS_END_2,
+        request.body.endRegime.toString()
+      );
     }
     response.writeHead(200, { "Content-Type": "text/html" });
     response.end("thanks");
@@ -233,11 +240,12 @@ client.connect(function(err, mongodbClient) {
   // lesquels on s'est inscrit.
   // C'est cette fonction qui alimente la BD.
   //
-  client_mqtt.on("message", function(topic, message) {
+  client_mqtt.on("message", function (topic, message) {
     console.log("MQTT msg on topic : ", topic.toString());
     console.log("Msg payload : ", message.toString());
 
     // Parsing du message supposé recu au format JSON
+    message = JSON.stringify(message);
     message = JSON.parse(message);
     wh = message.who;
     val = message.value;
@@ -284,10 +292,10 @@ client.connect(function(err, mongodbClient) {
         }
         console.log("Envoi mail alerte temperature");
       });
-    } 
+    }
 
     if (topic == "alerts/light") {
-      transporter.sendMail( mailAlerteLuminosite, (error, info) => {
+      transporter.sendMail(mailAlerteLuminosite, (error, info) => {
         if (error) {
           return console.log(error.message);
         }
@@ -324,14 +332,14 @@ client.connect(function(err, mongodbClient) {
     // Stocker la donnee/value contenue dans le message en
     // utilisant le nom du topic comme key dans la BD
     key = topicname;
-    dbo.collection(key).insertOne(new_entry, function(err, res) {
+    dbo.collection(key).insertOne(new_entry, function (err, res) {
       if (err) throw err;
       console.log("Item inserted in db in collection :", key);
       console.log(new_entry);
     });
 
     // Debug : voir les collections de la DB
-    dbo.listCollections().toArray(function(err, collInfos) {
+    dbo.listCollections().toArray(function (err, collInfos) {
       // collInfos is an array of collection info objects that look like:
       // { name: 'test', options: {} }
       console.log("\nList of collections currently in DB: ", collInfos);
@@ -354,7 +362,7 @@ client.connect(function(err, mongodbClient) {
   //app.use("/static", express.static(__dirname + "/public"));
   // Accés par le Node a la page HTML affichant les charts
   app.get("/", function (req, res) {
-    res.sendFile(path.join(__dirname +"/public/index.html"));
+    res.sendFile(path.join(__dirname + "/public/index.html"));
   });
 
   // Function for answering GET request on this node server ...
@@ -363,7 +371,7 @@ client.connect(function(err, mongodbClient) {
   //     /esp/temp?who=80%3A7D%3A3A%3AFD%3AC9%3A44
   // Utilisation de routes dynamiques => meme fonction pour
   // /esp/temp et /esp/light
-  app.get("/esp/:what", function(req, res) {
+  app.get("/esp/:what", function (req, res) {
     // cf https://stackabuse.com/get-query-strings-and-parameters-in-express-js/
     console.log(req.originalUrl);
 
@@ -377,7 +385,6 @@ client.connect(function(err, mongodbClient) {
     console.log("wants to GET ", wa);
     console.log("values from object ", wh);
 
-
     const nb = 200; // Récupération des nb derniers samples
     // stockés dans la collection associée a ce
     // topic (wa) et a cet ESP (wh)
@@ -388,7 +395,7 @@ client.connect(function(err, mongodbClient) {
       .find({ who: wh })
       .sort({ _id: -1 })
       .limit(nb)
-      .toArray(function(err, result) {
+      .toArray(function (err, result) {
         if (err) throw err;
         console.log("get on ", key);
         console.log(result);
@@ -407,7 +414,7 @@ app.listen(3000, () => {
 app.post("/s", (req, res) => {
   gm(img_path)
     .implode(-1.2)
-    .write(op_path, function(err) {
+    .write(op_path, function (err) {
       if (err) console.log(err);
     });
 });
