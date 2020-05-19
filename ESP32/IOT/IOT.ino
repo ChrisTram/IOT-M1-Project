@@ -12,9 +12,7 @@
 #include "net_misc.h"
 
 
-
 WiFiUDP ntpUDP;
-
 
 
 //Offset of 2 * 3600 for UTC+2 (Europe/Paris Time Zone) with 60 seconds update interval
@@ -54,14 +52,6 @@ RTC_DATA_ATTR int light_treshold2 = 2;
 RTC_DATA_ATTR String regime_start2 = "19:00";
 RTC_DATA_ATTR String regime_end2 = "07:00";
 
-
-//esp_err_t esp_sleep_enable_ulp_wakeup()
-//esp_err_t esp_sleep_pd_config(esp_sleep_pd_domain_t domain, esp_sleep_pd_option_t option) // ESP_PD_DOMAIN_RTC_PERIPH // ESP_PD_OPTION_ON
-
-//esp_err_t esp_sleep_enable_timer_wakeup(uint64_t time_in_us)
-//esp_err_t esp_sleep_disable_wakeup_source(esp_sleep_source_t source)  // ESP_SLEEP_WAKEUP_ULP light
-//esp_light_sleep_start()
-//esp_deep_sleep_start()
 
 void print_wakeup_reason() {
   esp_sleep_wakeup_cause_t wakeup_reason;
@@ -404,16 +394,6 @@ void loop() {
   payload.toCharArray(data, (payload.length() + 1));
   Serial.println(data);
   client.publish(TOPIC_LED, data);
-
-  /*Serial.println("Publishing alert temp");
-  payload = "{\"who\": \"" + whoami + "\", \"value\": " + String(get_temperature()) + "}";
-  payload.toCharArray(data, (payload.length() + 1));
-  Serial.println(data);
-  client.publish(TOPIC_ALERT_TEMP, data);*/
-
-  //delay(period);
-
-  //client.loop(); // Process MQTT ... obligatoire une fois par loop()
 
   int now_time = timeClient.getHours()*3600 + timeClient.getMinutes()*60;
   int start1 = timeToInt(regime_start1);
