@@ -221,8 +221,10 @@ void testAlertTemp2(int temp) {
     client.publish(TOPIC_ALERT_TEMP, data);
     delay(period);
     client.loop();
+    
   }
 }
+
 
 void testAlertLight1(int lum) {
   if (lum >= light_treshold1) {
@@ -403,7 +405,13 @@ void loop() {
   Serial.println(data);
   client.publish(TOPIC_LED, data);
 
-  delay(period);
+  /*Serial.println("Publishing alert temp");
+  payload = "{\"who\": \"" + whoami + "\", \"value\": " + String(get_temperature()) + "}";
+  payload.toCharArray(data, (payload.length() + 1));
+  Serial.println(data);
+  client.publish(TOPIC_ALERT_TEMP, data);*/
+
+  //delay(period);
 
   //client.loop(); // Process MQTT ... obligatoire une fois par loop()
 
